@@ -6,7 +6,8 @@
   "author": "Robert Bedard",
   "dependencies": {
     "d20": "^1.4.1",
-    "discord.io": "^2.5.3",
+    "discord.io": "github:woor/discord.io#gateway_v6",
+    "foswig": "^1.1.1",
     "winston": "^2.4.0"
   }
 }

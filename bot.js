@@ -89,9 +89,15 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                     message: `Randomly generated elf name: ${elfFemaleChain.generateWord(5,15,true)}`
                   })
                 }
-
             // Just add any case commands if you want to..
          }
+         break;
+         case 'treasure' :
+          bot.sendMessage({
+            to: channelID,
+            message: `Congratuations! You found ${Math.floor(Math.random() * Math.floor(100)) } gp`
+          });
      }
+
    }
 });
