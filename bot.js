@@ -1,7 +1,7 @@
 
-var Discord = require('discord.io');
+var Discord = require('discord.js');
 var logger = require('winston');
-var auth = require('./auth.json');
+var auth = require('./config.json');
 var d20 = require('d20');
 var Foswig = require('foswig');
 
@@ -30,74 +30,53 @@ logger.add(logger.transports.Console, {
 logger.level = 'debug';
 // Initialize Discord Bot
 
-var bot = new Discord.Client({
-   token: auth.token,
-   autorun: true
-});
+var bot = new Discord.Client();
+
 bot.on('ready', function() {
-    console.log('Logged in as %s - %s\n', bot.username, bot.id);
+    console.log('Logged in as %s\n', bot.user.tag);
 });
 
-bot.on('message', function(user, userID, channelID, message, event) {
-    if (message === "You're a nerd!") {
-        bot.sendMessage({
-            to: channelID,
-            message: "No, you're a nerd!!!"
-        });
+bot.on('message', message => {
+    if (message.content === "You're a nerd!") {
+        message.channel.send("No, you're a nerd!!!");
     }
 });
 
-bot.on('message', function (user, userID, channelID, message, evt) {
+bot.on('message', message => {
     // Our bot needs to know if it will execute a command
     // It will listen for messages that will start with `!`
-    if (message.substring(0, 1) == '!') {
-        var args = message.substring(1).split(' ');
+    if (message.content.substring(0, 1) == '!') {
+        var args = message.content.substring(1).split(' ');
         var cmd = args[0];
 
         args = args.splice(1);
         switch(cmd) {
             case 'roll':
-                bot.sendMessage({
-                    to: channelID,
-                    message: `@${user} rolled ${d20.roll(args.join(" "))}.`
-                });
+                message.channel.send(`${message.author} rolled ${d20.roll(args.join(" "))}.`);
             break;
             case 'name':
               if(args[0] === 'dwarf') {
                 if(args[1] === 'male') {
-                  bot.sendMessage({
-                    to: channelID,
-                    message: `Randomly generated dwarf name: ${dwarfMaleChain.generateWord(5,15,true)}`
-                  })
+                  message.channel.send(`Randomly generated dwarf name: ${dwarfMaleChain.generateWord(5,15,true)}`)
                 } else if(args[1] === 'female')  {
-                  bot.sendMessage({
-                    to: channelID,
-                    message: `Randomly generated dwarf name: ${dwarfFemaleChain.generateWord(5,15,true)}`
-                  })
+                  message.channel.send(`Randomly generated dwarf name: ${dwarfFemaleChain.generateWord(5,15,true)}`)
                 }
 
 
               } else if(args[0] === 'elf') {
                 if(args[1] === 'male') {
-                  bot.sendMessage({
-                    to: channelID,
-                    message: `Randomly generated elf name: ${elfMaleChain.generateWord(5,15,true)}`
-                  })
+                  message.channel.send(`Randomly generated elf name: ${elfMaleChain.generateWord(5,15,true)}`)
                 } else if(args[1] === 'female')  {
-                  bot.sendMessage({
-                    to: channelID,
-                    message: `Randomly generated elf name: ${elfFemaleChain.generateWord(5,15,true)}`
-                  })
+                  message.channel.send(`Randomly generated elf name: ${elfFemaleChain.generateWord(5,15,true)}`)
                 }
             // Just add any case commands if you want to..
          }
          break;
          case 'treasure' :
-          bot.sendMessage({
-            to: channelID,
-            message: `Congratuations! You found ${Math.floor(Math.random() * Math.floor(100)) } gp`
-          });
+          message.channel.send(`Congratuations! You found ${Math.floor(Math.random() * Math.floor(100)) } gp`);
      }
 
    }
 });
+
+bot.login(auth.token);
