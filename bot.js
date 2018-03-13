@@ -1,3 +1,4 @@
+#!/usr/bin/env nodejs
 
 var Discord = require('discord.js');
 var logger = require('winston');
