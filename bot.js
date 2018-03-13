@@ -52,7 +52,10 @@ bot.on('message', message => {
         args = args.splice(1);
         switch(cmd) {
             case 'roll':
-                message.channel.send(`${message.author} rolled ${d20.roll(args.join(" "))}.`);
+                const rollResult = d20.roll(args.join(" "), true);
+                const reducer = (accumulator, currentValue) => accumulator + currentValue;
+                // console.log('You rolled ' + rollResult.join('+') + '=' + rollResult.reduce(reducer));
+                message.channel.send(`${message.author} rolled ${rollResult.join('+')}=${rollResult.reduce(reducer)}.`);
             break;
             case 'name':
               if(args[0] === 'dwarf') {
